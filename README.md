@@ -1,1 +1,1 @@
-Hari ini kita akan eksplorasi modul dari NPM serta kita akan mulai membuat sebuah API sederhana tanpa express (pure http)
+Di sesi ini kita akan belajar cara menggunakan express, sebuah framework untuk applikasi node js. Kita akan melihat perbedaan dari kedua tipe API seperti scalability dan REST architechture. Fitur express seperti params, query, dan body akan dibahas di sesi ini.
