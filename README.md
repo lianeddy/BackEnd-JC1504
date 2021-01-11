@@ -1,1 +1,1 @@
-Di sesi ini kita akan belajar cara menggunakan express, sebuah framework untuk applikasi node js. Kita akan melihat perbedaan dari kedua tipe API seperti scalability dan REST architechture. Fitur express seperti params, query, dan body akan dibahas di sesi ini.
+Di sesi ini kita akan membahas SQL Database dan juga pemakaian mySQL. Kita akan melakukan manipulasi data di SQl dengan menggunakan query dan statement SQL CRUD (Create, Read, Update, Delete).
