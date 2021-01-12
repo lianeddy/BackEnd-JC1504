@@ -1,1 +1,1 @@
-Di sesi ini kita akan membahas SQL Database dan juga pemakaian mySQL. Kita akan melakukan manipulasi data di SQl dengan menggunakan query dan statement SQL CRUD (Create, Read, Update, Delete).
+Di sesi ini kita akan belajar tentang join table di sql. Tipe-tipe join (inner, left, right, outer). Join bisa dilakukan apapila dua table memiliki sebuah relasi (one to one, one to many, many to many).

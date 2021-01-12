@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `jc1504` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `jc1504`;
 -- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: jc1504
@@ -31,7 +29,7 @@ CREATE TABLE `products` (
   `caption` varchar(200) NOT NULL,
   `stock` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=501 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,8 +38,32 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'Apel',10000,'wah enak apel',10),(2,'Duren',20000,'wah enak duren',10),(3,'Rambutan',30000,'wah enak rambutan',10),(4,'Pisang',40000,'wah pisang',10),(5,'Mangga',50000,'wah enak mangga',10);
+INSERT INTO `products` VALUES (2,'Duren',20000,'wah enak duren',10),(3,'Rambutan',30000,'wah enak rambutan',10),(4,'Pisang',40000,'wah pisang',10),(100,'Apel',10000,'wah enak apel',10),(500,'Mangga',50000,'wah enak mangga',10);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (1,'admin'),(2,'user');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -53,12 +75,13 @@ DROP TABLE IF EXISTS `transaction`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime NOT NULL,
   `userID` int(11) NOT NULL,
-  `productID` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `harga` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `total` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id_idx` (`userID`),
+  CONSTRAINT `userID` FOREIGN KEY (`userID`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,8 +90,35 @@ CREATE TABLE `transaction` (
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-INSERT INTO `transaction` VALUES (1,1,2,5,20000),(2,1,1,1,10000),(3,3,5,3,50000),(4,3,4,2,40000),(5,6,3,5,30000),(6,6,1,10,10000),(7,9,5,11,50000);
+INSERT INTO `transaction` VALUES (1,'2021-01-12 11:58:00',15,300000);
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transactionitem`
+--
+
+DROP TABLE IF EXISTS `transactionitem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `transactionitem` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `transactionID` int(11) NOT NULL,
+  `productID` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `harga` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transactionitem`
+--
+
+LOCK TABLES `transactionitem` WRITE;
+/*!40000 ALTER TABLE `transactionitem` DISABLE KEYS */;
+INSERT INTO `transactionitem` VALUES (1,1,2,5,20000),(2,1,4,5,40000);
+/*!40000 ALTER TABLE `transactionitem` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -86,8 +136,11 @@ CREATE TABLE `users` (
   `alamat` varchar(45) DEFAULT NULL,
   `usia` int(2) DEFAULT NULL,
   `beratbadan` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `roleID` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `roleID_idx` (`roleID`),
+  CONSTRAINT `roleID` FOREIGN KEY (`roleID`) REFERENCES `roles` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,7 +149,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'lianeddy','lian.eddy@gmail.com','asd123','BSD',23,80),(3,'Susilo','susilo@mail.com','asd','Bandung',40,80),(6,'joko123','joko@mail.ocm','asd','Bandung',34,50),(8,'Bayu','bayu@mail.com','passwordrahasia','Bandung',28,86),(9,'andi','andi@mail.com','123','Jakarta',NULL,60);
+INSERT INTO `users` VALUES (15,'Susilo','susilo@mail.com','asd','Bandung',40,80,1),(21,'joko123','joko@mail.ocm','asd','Bandung',34,50,2),(30,'Dicky','dicky@mail.com','asd','BSD',45,123,1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -109,4 +162,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-11 11:58:58
+-- Dump completed on 2021-01-12 12:05:19
