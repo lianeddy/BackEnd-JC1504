@@ -27,12 +27,8 @@ CREATE TABLE `cart` (
   `userID` int(11) NOT NULL,
   `productID` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userID_idx` (`userID`),
-  KEY `productID_idx` (`productID`),
-  CONSTRAINT `product_ID` FOREIGN KEY (`productID`) REFERENCES `products` (`id`),
-  CONSTRAINT `user_ID` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -58,6 +54,7 @@ CREATE TABLE `products` (
   `harga` int(11) NOT NULL,
   `caption` varchar(200) NOT NULL,
   `stock` int(11) NOT NULL,
+  `isAvailable` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=506 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -68,7 +65,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (2,'Duren',20000,'wah enak duren',10),(3,'Rambutan',30000,'wah enak rambutan',10),(4,'Pisang',40000,'wah pisang',10),(100,'Apel',10000,'wah enak apel',10),(500,'Mangga',50000,'wah enak mangga',10),(501,'Nangka',60000,'wah enak Nangka',10),(502,'Duku',5000,'wah enak duku',10),(503,'Nanas',5000,'wah enak nanas',10),(505,'Naga',5000,'wah enak NAGA',50);
+INSERT INTO `products` VALUES (3,'Rambutan',30000,'wah enak rambutan',10,1),(4,'Pisang',40000,'wah pisang',10,0),(100,'Apel',10000,'wah enak apel',10,1),(500,'Mangga',50000,'wah enak mangga',10,0),(501,'Nangka',60000,'wah enak Nangka',0,0);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -137,11 +134,7 @@ CREATE TABLE `transactionitem` (
   `productID` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `harga` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `productID_idx` (`productID`),
-  KEY `transactionID_idx` (`transactionID`),
-  CONSTRAINT `productID` FOREIGN KEY (`productID`) REFERENCES `products` (`id`),
-  CONSTRAINT `transactionID` FOREIGN KEY (`transactionID`) REFERENCES `transaction` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -196,4 +189,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-13 12:07:49
+-- Dump completed on 2021-01-14 12:02:29
