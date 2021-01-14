@@ -3,7 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const port = 2000;
-const { productRouter } = require("./router");
+const { cartRouter, productRouter } = require("./router");
 
 const app = express();
 
@@ -15,5 +15,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/products", productRouter);
+app.use("/cart", cartRouter);
 
 app.listen(port, () => console.log(`API active at port ${port}`));
