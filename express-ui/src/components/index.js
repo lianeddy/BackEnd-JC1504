@@ -1,3 +1,5 @@
+import CardProduct from "./CardProduct";
+import DeleteModal from "./DeleteModal";
 import Header from "./Header";
 
-export { Header };
+export { CardProduct, DeleteModal, Header };
