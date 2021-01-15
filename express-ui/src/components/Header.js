@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {
   Collapse,
   DropdownItem,
@@ -46,7 +47,9 @@ class Header extends Component {
                   Options
                 </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem>Option 1</DropdownItem>
+                  <DropdownItem>
+                    <Link to="/login">Login</Link>
+                  </DropdownItem>
                   <DropdownItem>Option 2</DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem>Reset</DropdownItem>
