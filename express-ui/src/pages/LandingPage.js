@@ -1,52 +1,29 @@
 import React, { Component } from "react";
-import Axios from "axios";
-import { api_url } from "../helpers";
 import { CardProduct, DeleteModal } from "../components";
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import { Button, FormGroup, Input, Label, Spinner } from "reactstrap";
+import { connect } from "react-redux";
+import { fetchProductsAction, deleteProductsAction } from "../redux/actions";
 
 class LandingPage extends Component {
   state = {
-    data: [],
     isOpen: false,
     idProduct: 0,
     isAvailable: false,
   };
 
-  componentDidMount() {
-    this.fetchData();
+  async componentDidMount() {
+    const { fetchProductsAction } = this.props;
+    fetchProductsAction();
+    // this.fetchData();
   }
-
-  fetchData = () => {
-    let url = `${api_url}/products`;
-    if (this.state.isAvailable) {
-      url += "?isAvailable=1";
-    }
-    Axios.get(url)
-      .then((res) => {
-        this.setState({ data: res.data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   toggle = (id) => {
     this.setState({ isOpen: !this.state.isOpen, idProduct: id });
   };
 
-  deleteData = (id = 0) => {
-    Axios.put(`${api_url}/products/${id}`)
-      .then((res) => {
-        this.toggle();
-        this.fetchData();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   renderCardProducts = () => {
-    return this.state.data.map(({ id, nama, harga, caption, stock }) => {
+    const { productList } = this.props;
+    return productList.map(({ id, nama, harga, caption, stock }) => {
       return (
         <div className="mx-2 my-2" style={{ width: "200px" }} key={id}>
           <CardProduct
@@ -63,7 +40,11 @@ class LandingPage extends Component {
   };
 
   render() {
-    console.log(this.state.isAvailable);
+    const {
+      loading,
+      // error
+      deleteProductsAction,
+    } = this.props;
     return (
       <div className="row">
         <div className="col-3 d-flex flex-column">
@@ -79,14 +60,22 @@ class LandingPage extends Component {
               Available Products
             </Label>
           </FormGroup>
-          <Button onClick={this.fetchData}>Search</Button>
+          <Button>Search</Button>
         </div>
         <div className="d-flex justify-content-center col-9">
-          <div className="d-flex flex-wrap">{this.renderCardProducts()}</div>
+          {loading ? (
+            <div>
+              <Spinner color="info" />
+            </div>
+          ) : (
+            <div className="d-flex flex-wrap">{this.renderCardProducts()}</div>
+          )}
+          {/* {error ? error : null} */}
+
           <DeleteModal
             isOpen={this.state.isOpen}
             toggle={this.toggle}
-            deleteData={() => this.deleteData(this.state.idProduct)}
+            deleteData={() => deleteProductsAction(this.state.idProduct)}
           />
         </div>
       </div>
@@ -94,4 +83,15 @@ class LandingPage extends Component {
   }
 }
 
-export default LandingPage;
+const mapStatetoProps = ({ product }) => {
+  return {
+    loading: product.loading,
+    productList: product.productList,
+    error: product.error,
+  };
+};
+
+export default connect(mapStatetoProps, {
+  fetchProductsAction,
+  deleteProductsAction,
+})(LandingPage);
