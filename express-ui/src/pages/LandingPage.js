@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  AddModal,
-  CardProduct,
-  DeleteModal,
-  LandingCards,
-  SideBar,
-} from "../components";
-import { Spinner } from "reactstrap";
+import { AddModal, DeleteModal, LandingCards, SideBar } from "../components";
 import { connect } from "react-redux";
 import {
   addProductAction,

@@ -6,7 +6,7 @@ const _ = require("lodash");
 // Get ALL
 router.get("/", (req, res) => {
   // let sql = `SELECT * FROM products WHERE isAvailable = 1 AND harga BETWEEN 10000 and 50000
-  let sql = `SELECT * FROM proucts`;
+  let sql = `SELECT * FROM products`;
   if (!_.isEmpty(req.query)) {
     sql += ` WHERE`;
   }
@@ -54,9 +54,9 @@ router.get("/:id", (req, res) => {
 
 // Insert
 router.post("/", (req, res) => {
-  const { nama, harga, caption } = req.body;
-  //   let sql = `INSERT INTO products (nama, harga, caption, stock) VALUES ('${nama}', ${harga}, '${caption}', 20)`;
-  let sql = `INSERT INTO products set ?`;
+  const { nama, harga, caption, stock } = req.body;
+  let sql = `INSERT INTO products (nama, harga, caption, stock, isAvailable) VALUES ('${nama}', ${harga}, '${caption}', '${stock}', 1)`;
+  // let sql = `INSERT INTO products set ?`;
   db.query(sql, req.body, (err, data) => {
     if (err) {
       return res.status(500).send(err.message);

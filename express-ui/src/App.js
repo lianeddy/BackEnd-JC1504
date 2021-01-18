@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import { Header } from "./components";
-import { LandingPage } from "./pages";
+import { LandingPage, LoginPage } from "./pages";
 
 class App extends Component {
   state = {};
@@ -10,6 +10,7 @@ class App extends Component {
       <div>
         <Header />
         <Route path="/" exact component={LandingPage} />
+        <Route path="/login" component={LoginPage} />
       </div>
     );
   }

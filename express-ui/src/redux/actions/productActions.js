@@ -5,6 +5,7 @@ import {
   API_PRODUCT_SUCCESS,
   API_PRODUCT_START,
   API_PRODUCT_FILL,
+  NULLIFY_ERROR,
 } from "../types";
 
 const url = `${api_url}/products`;
@@ -70,5 +71,31 @@ export const deleteProductsAction = (id) => {
           payload: err.message,
         });
       });
+  };
+};
+
+export const addProductAction = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: API_PRODUCT_START,
+    });
+    try {
+      await Axios.post(url, data);
+      dispatch(fetchProductsAction());
+      dispatch({
+        type: API_PRODUCT_SUCCESS,
+      });
+    } catch (err) {
+      dispatch({
+        type: API_PRODUCT_FAILED,
+        payload: err.message,
+      });
+    }
+  };
+};
+
+export const nullifyErrorAction = () => {
+  return {
+    type: NULLIFY_ERROR,
   };
 };
