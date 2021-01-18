@@ -1,8 +1,15 @@
 import React, { Component } from "react";
-import { AddModal, DeleteModal, LandingCards, SideBar } from "../components";
+import {
+  AddModal,
+  DeleteModal,
+  EditModal,
+  LandingCards,
+  SideBar,
+} from "../components";
 import { connect } from "react-redux";
 import {
   addProductAction,
+  editProductsAction,
   deleteProductsAction,
   fetchProductsAction,
   nullifyErrorAction,
@@ -14,6 +21,7 @@ class LandingPage extends Component {
     idProduct: 0,
     isAvailable: false,
     isOpenAdd: false,
+    isOpenEdit: false,
   };
 
   componentDidMount() {
@@ -28,6 +36,10 @@ class LandingPage extends Component {
 
   toggle = (id) => {
     this.setState({ isOpen: !this.state.isOpen, idProduct: id });
+  };
+
+  toggleEdit = (id) => {
+    this.setState({ isOpenEdit: !this.state.isOpenEdit, idProduct: id });
   };
 
   toggleAdd = () => {
@@ -51,6 +63,7 @@ class LandingPage extends Component {
             isOpen={this.state.isOpen}
             loading={loading}
             error={error}
+            toggleEdit={this.toggleEdit}
           />
         </div>
         <DeleteModal
@@ -62,6 +75,16 @@ class LandingPage extends Component {
           isOpen={this.state.isOpenAdd}
           toggle={this.toggleAdd}
           addData={this.props.addProductAction}
+        />
+        <EditModal
+          isOpen={this.state.isOpenEdit}
+          toggle={this.toggleEdit}
+          data={
+            this.state.idProduct
+              ? productList.find((val) => val.id === this.state.idProduct)
+              : {}
+          }
+          editData={this.props.editProductsAction}
         />
       </div>
     );
@@ -78,6 +101,7 @@ const mapStatetoProps = ({ product }) => {
 
 export default connect(mapStatetoProps, {
   addProductAction,
+  editProductsAction,
   deleteProductsAction,
   fetchProductsAction,
   nullifyErrorAction,

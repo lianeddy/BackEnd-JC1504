@@ -6,7 +6,7 @@ class LandingCards extends Component {
   state = {};
 
   renderCardProducts = () => {
-    const { productList, toggle, isOpen } = this.props;
+    const { productList, toggle, isOpen, toggleEdit } = this.props;
     return productList.map(({ id, nama, harga, caption, stock }) => {
       return (
         <div className="mx-2 my-2" style={{ width: "200px" }} key={id}>
@@ -17,6 +17,7 @@ class LandingCards extends Component {
             stock={stock}
             toggle={() => toggle(id)}
             isOpen={isOpen}
+            toggleEdit={() => toggleEdit(id)}
           />
         </div>
       );

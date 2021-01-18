@@ -94,6 +94,26 @@ export const addProductAction = (data) => {
   };
 };
 
+export const editProductsAction = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: API_PRODUCT_START,
+    });
+    try {
+      await Axios.patch(`${url}/${data.id}`, data);
+      dispatch(fetchProductsAction());
+      dispatch({
+        type: API_PRODUCT_SUCCESS,
+      });
+    } catch (err) {
+      dispatch({
+        type: API_PRODUCT_FAILED,
+        payload: err.message,
+      });
+    }
+  };
+};
+
 export const nullifyErrorAction = () => {
   return {
     type: NULLIFY_ERROR,

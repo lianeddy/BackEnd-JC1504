@@ -67,7 +67,8 @@ router.post("/", (req, res) => {
 
 // Update
 router.patch("/:id", (req, res) => {
-  let sql = `UPDATE products SET caption = '${req.body.caption}' WHERE id = ${req.params.id}`;
+  const { nama, caption, harga, stock } = req.body;
+  let sql = `UPDATE products SET nama = '${nama}', harga = ${harga}, stock = ${stock},  caption = '${caption}' WHERE id = ${req.params.id}`;
   db.query(sql, (err) => {
     if (err) {
       return res.status(500).send(err.message);
