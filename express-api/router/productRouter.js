@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database");
 const _ = require("lodash");
+const { uploader } = require("../helper");
 
 // Get ALL
 router.get("/", (req, res) => {
@@ -54,14 +55,22 @@ router.get("/:id", (req, res) => {
 
 // Insert
 router.post("/", (req, res) => {
-  const { nama, harga, caption, stock } = req.body;
-  let sql = `INSERT INTO products (nama, harga, caption, stock, isAvailable) VALUES ('${nama}', ${harga}, '${caption}', '${stock}', 1)`;
-  // let sql = `INSERT INTO products set ?`;
-  db.query(sql, req.body, (err, data) => {
-    if (err) {
-      return res.status(500).send(err.message);
-    }
-    return res.status(201).send({ message: "Data Created", status: "Created" });
+  const path = "/products";
+  const upload = uploader(path, "PRD").fields([{ name: "image" }]);
+  upload(req, res, (err) => {
+    const { image } = req.files;
+    const imagePath = image ? `${path}/${image[0].filename}` : null;
+    const { nama, harga, caption, stock } = req.body;
+    let sql = `INSERT INTO products (nama, harga, caption, stock, isAvailable, imagepath) VALUES ('${nama}', ${harga}, '${caption}', '${stock}', 1, '${imagePath}')`;
+    // let sql = `INSERT INTO products set ?`;
+    db.query(sql, (err, data) => {
+      if (err) {
+        return res.status(500).send(err.message);
+      }
+      return res
+        .status(201)
+        .send({ message: "Data Created", status: "Created" });
+    });
   });
 });
 

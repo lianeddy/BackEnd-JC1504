@@ -9,6 +9,7 @@ import {
   Label,
   FormGroup,
   Input,
+  CustomInput,
 } from "reactstrap";
 
 class AddModal extends Component {
@@ -49,6 +50,8 @@ class AddModal extends Component {
                 <Input type="number" id="harga" onChange={this.onChangeInput} />
                 <Label>Stock</Label>
                 <Input type="number" id="stock" onChange={this.onChangeInput} />
+                <Label>Image</Label>
+                <CustomInput type="file" />
               </FormGroup>
             </Form>
           </ModalBody>
