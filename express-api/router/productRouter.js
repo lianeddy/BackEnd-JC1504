@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../database");
+const fs = require("fs");
 const _ = require("lodash");
 const { uploader } = require("../helper");
 
@@ -59,14 +60,24 @@ router.post("/", (req, res) => {
   const upload = uploader(path, "PRD").fields([{ name: "image" }]);
   upload(req, res, (err) => {
     const { image } = req.files;
+
+    // Karena front end mengirim object tapi dalam bentuk string panjang (stringify)
+    // Menggunakan parse akan mengubah string tersebut menjadi object js
+    // Karena sudah di parse menjadi object js, dapat di destructure (67)
+    const { nama, harga, caption, stock } = JSON.parse(req.body.data);
+
+    // tentukan alamat foto di api yang akan disimpan di sql
     const imagePath = image ? `${path}/${image[0].filename}` : null;
-    const { nama, harga, caption, stock } = req.body;
+
+    // data produk serta alamat foto disimpan di sql
     let sql = `INSERT INTO products (nama, harga, caption, stock, isAvailable, imagepath) VALUES ('${nama}', ${harga}, '${caption}', '${stock}', 1, '${imagePath}')`;
-    // let sql = `INSERT INTO products set ?`;
     db.query(sql, (err, data) => {
       if (err) {
+        // Jika sql error akan menghapus foto yang telah di upload
+        fs.unlinkSync(`public${imagePath}`);
         return res.status(500).send(err.message);
       }
+      // Jika semua proses berjalan dengan lancar return (81)
       return res
         .status(201)
         .send({ message: "Data Created", status: "Created" });
@@ -103,11 +114,25 @@ router.put("/:id", (req, res) => {
 // Delete Data
 router.delete("/:id", (req, res) => {
   const id = parseInt(req.params.id);
-  db.query(`DELETE FROM products WHERE id = ${id}`, (err) => {
+  // Ambil alamat foto dari sql yang disimpan di API
+  db.query(`SELECT * FROM products WHERE id = ${id}`, (err, data) => {
     if (err) {
-      return res.status(500).send(err.message);
+      res.status(500).send(err);
     }
-    return res.status(200).send({ message: "Data Deleted", status: "Deleted" });
+    // dapat alamat foto di api
+    const oldImagePath = data[0].imagepath;
+    const idProduct = data[0].id;
+    // delete data di sql
+    db.query(`DELETE FROM products WHERE id = ${idProduct}`, (err) => {
+      if (err) {
+        return res.status(500).send(err.message);
+      }
+      // delete file di API
+      fs.unlinkSync(`public${oldImagePath}`);
+      return res
+        .status(200)
+        .send({ message: "Data Deleted", status: "Deleted" });
+    });
   });
 });
 

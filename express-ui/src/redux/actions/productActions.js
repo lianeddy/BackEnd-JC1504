@@ -58,7 +58,7 @@ export const deleteProductsAction = (id) => {
     dispatch({
       type: API_PRODUCT_START,
     });
-    Axios.put(`${url}/id`)
+    Axios.delete(`${url}/${id}`)
       .then((res) => {
         dispatch(fetchProductsAction());
         dispatch({
@@ -76,11 +76,35 @@ export const deleteProductsAction = (id) => {
 
 export const addProductAction = (data) => {
   return async (dispatch) => {
+    const { nama, caption, stock, image, harga } = data;
+    // Karena yang kita kirim ke API adalah sebuah file
+    // Kita pakai formdata (WAJIB)
+    let formData = new FormData();
+    // Karena formdata tidak bisa append object
+    // Maka kita pakai stringify untuk mengubah object tersebut menjadi string panjang (85)
+    const value = JSON.stringify({ nama, caption, stock, harga });
+    formData.append("image", image.imageFile);
+    formData.append("data", value);
+    // for (let key of formData) {
+    //   console.log(key);
+    // }
+    // formData.append("nama", nama);
+    // formData.append("caption", caption);
+    // formData.append("stock", stock);
+    // formData.append("harga", harga);
     dispatch({
       type: API_PRODUCT_START,
     });
     try {
-      await Axios.post(url, data);
+      // Memberi tahu kepada api bahwa kita mengirim file dalam bentuk formdata (102)
+      const headers = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      // argumen axios
+      // axios(alamat api, data yang dikirim, header)
+      await Axios.post(url, formData, headers);
       dispatch(fetchProductsAction());
       dispatch({
         type: API_PRODUCT_SUCCESS,
@@ -91,6 +115,19 @@ export const addProductAction = (data) => {
         payload: err.message,
       });
     }
+
+    //   try {
+    //     await Axios.post(url, data);
+    //     dispatch(fetchProductsAction());
+    //     dispatch({
+    //       type: API_PRODUCT_SUCCESS,
+    //     });
+    //   } catch (err) {
+    //     dispatch({
+    //       type: API_PRODUCT_FAILED,
+    //       payload: err.message,
+    //     });
+    //   }
   };
 };
 

@@ -42,6 +42,30 @@ INSERT INTO `cart` VALUES (1,15,2,1),(2,15,3,2),(3,15,4,3),(4,21,2,4),(5,21,3,5)
 UNLOCK TABLES;
 
 --
+-- Table structure for table `images`
+--
+
+DROP TABLE IF EXISTS `images`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `images` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `imagepath` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `images`
+--
+
+LOCK TABLES `images` WRITE;
+/*!40000 ALTER TABLE `images` DISABLE KEYS */;
+INSERT INTO `images` VALUES (11,'/images/IMG1611025995227.jpeg');
+/*!40000 ALTER TABLE `images` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `products`
 --
 
@@ -55,8 +79,9 @@ CREATE TABLE `products` (
   `caption` varchar(200) NOT NULL,
   `stock` int(11) NOT NULL,
   `isAvailable` tinyint(1) NOT NULL,
+  `imagepath` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=506 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=516 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,7 +90,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (3,'Rambutan',30000,'wah enak rambutan',10,1),(4,'Pisang',40000,'wah pisang',10,0),(100,'Apel',10000,'wah enak apel',10,1),(500,'Mangga',50000,'wah enak mangga',10,0),(501,'Nangka',60000,'wah enak Nangka',0,0);
+INSERT INTO `products` VALUES (3,'Rambutan merah',32000,'rambutan yang warnanya merah',50,0,NULL),(4,'Pisang',40000,'wah pisang',10,0,NULL),(100,'Apel',10000,'wah enak apel',10,0,NULL),(500,'Mangga',50000,'wah enak mangga',10,0,NULL),(506,'Duren',50000,'wah duren enak',12,0,NULL),(507,'Jeruk',400000,'wah enak jeruk',10,0,NULL),(508,'Jambu',45000,'wah enak jambu',50,0,NULL),(510,'Apel Fuji',50000,'enak jepang',50,1,NULL);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,4 +214,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-14 12:02:29
+-- Dump completed on 2021-01-19 11:46:22

@@ -18,6 +18,10 @@ class AddModal extends Component {
     caption: "",
     stock: 0,
     harga: 0,
+    image: {
+      imageName: "Choose File",
+      imageFile: undefined,
+    },
   };
 
   onChangeInput = (e) => {
@@ -27,9 +31,29 @@ class AddModal extends Component {
     });
   };
 
+  onChangeImage = (e) => {
+    // File gambar masuk kedalam state
+    if (e.target.files[0]) {
+      this.setState({
+        image: {
+          imageName: e.target.files[0].name,
+          imageFile: e.target.files[0],
+        },
+      });
+    } else {
+      this.setState({
+        image: {
+          imageName: "Choose File",
+          imageFile: undefined,
+        },
+      });
+    }
+  };
+
   addButton = () => {
     const { toggle, addData } = this.props;
     toggle();
+    // action creator membawa argumen data produk dan gambar
     addData(this.state);
   };
 
@@ -51,7 +75,14 @@ class AddModal extends Component {
                 <Label>Stock</Label>
                 <Input type="number" id="stock" onChange={this.onChangeInput} />
                 <Label>Image</Label>
-                <CustomInput type="file" />
+                {/* File masuk disini */}
+                {/* Ketika file diisi jalan function onchangeimage */}
+                <CustomInput
+                  id="inputImage"
+                  type="file"
+                  label={this.state.image.imageName}
+                  onChange={this.onChangeImage}
+                />
               </FormGroup>
             </Form>
           </ModalBody>
