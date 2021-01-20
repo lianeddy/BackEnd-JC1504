@@ -109,7 +109,9 @@ router.patch("/:id", (req, res) => {
           const imagePath = image
             ? `${path}/${image[0].filename}`
             : oldImagePath;
-          let sql = `UPDATE products SET nama = '${nama}', harga = ${harga}, caption = '${caption}', stock = ${stock}, imagepath = '${imagePath}' WHERE id = ${idProduct}`;
+          let sql = `UPDATE products SET nama = '${nama}', harga = ${harga}, caption = '${caption}', stock = ${stock}, imagepath = ${
+            imagePath ? `${imagePath}` : null
+          } WHERE id = ${idProduct}`;
 
           // let sql = `UPDATE products set imagepath = '${imagePath}' WHERE id = ${idProduct}`;
 
