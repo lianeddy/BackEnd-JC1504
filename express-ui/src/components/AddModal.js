@@ -57,12 +57,24 @@ class AddModal extends Component {
     addData(this.state);
   };
 
+  toggleCancel = () => {
+    const { toggle } = this.props;
+    toggle();
+    this.setState({
+      image: {
+        imageName: "Choose File",
+        imageFile: undefined,
+      },
+    });
+  };
+
   render() {
-    const { isOpen, toggle } = this.props;
+    console.log(this.state);
+    const { isOpen } = this.props;
     return (
       <div>
-        <Modal isOpen={isOpen} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Add a Product</ModalHeader>
+        <Modal isOpen={isOpen} toggle={this.toggleCancel}>
+          <ModalHeader toggle={this.toggleCancel}>Add a Product</ModalHeader>
           <ModalBody>
             <Form>
               <FormGroup>
@@ -90,7 +102,7 @@ class AddModal extends Component {
             <Button color="primary" onClick={this.addButton}>
               Add
             </Button>
-            <Button color="secondary" onClick={toggle}>
+            <Button color="secondary" onClick={this.toggleCancel}>
               Cancel
             </Button>
           </ModalFooter>

@@ -137,7 +137,17 @@ export const editProductsAction = (data) => {
       type: API_PRODUCT_START,
     });
     try {
-      await Axios.patch(`${url}/${data.id}`, data);
+      const { id, nama, harga, caption, stock, image } = data;
+      const value = JSON.stringify({ nama, caption, stock, harga });
+      let formData = new FormData();
+      formData.append("image", image.imageFile);
+      formData.append("data", value);
+      const headers = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      await Axios.patch(`${url}/${id}`, formData, headers);
       dispatch(fetchProductsAction());
       dispatch({
         type: API_PRODUCT_SUCCESS,

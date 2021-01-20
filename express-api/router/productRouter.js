@@ -56,45 +56,92 @@ router.get("/:id", (req, res) => {
 
 // Insert
 router.post("/", (req, res) => {
-  const path = "/products";
-  const upload = uploader(path, "PRD").fields([{ name: "image" }]);
-  upload(req, res, (err) => {
-    const { image } = req.files;
+  try {
+    const path = "/products";
+    const upload = uploader(path, "PRD").fields([{ name: "image" }]);
+    upload(req, res, (err) => {
+      const { image } = req.files;
 
-    // Karena front end mengirim object tapi dalam bentuk string panjang (stringify)
-    // Menggunakan parse akan mengubah string tersebut menjadi object js
-    // Karena sudah di parse menjadi object js, dapat di destructure (67)
-    const { nama, harga, caption, stock } = JSON.parse(req.body.data);
+      // Karena front end mengirim object tapi dalam bentuk string panjang (stringify)
+      // Menggunakan parse akan mengubah string tersebut menjadi object js
+      // Karena sudah di parse menjadi object js, dapat di destructure (67)
+      const { nama, harga, caption, stock } = JSON.parse(req.body.data);
 
-    // tentukan alamat foto di api yang akan disimpan di sql
-    const imagePath = image ? `${path}/${image[0].filename}` : null;
+      // tentukan alamat foto di api yang akan disimpan di sql
+      const imagePath = image ? `${path}/${image[0].filename}` : null;
 
-    // data produk serta alamat foto disimpan di sql
-    let sql = `INSERT INTO products (nama, harga, caption, stock, isAvailable, imagepath) VALUES ('${nama}', ${harga}, '${caption}', '${stock}', 1, '${imagePath}')`;
-    db.query(sql, (err, data) => {
-      if (err) {
-        // Jika sql error akan menghapus foto yang telah di upload
-        fs.unlinkSync(`public${imagePath}`);
-        return res.status(500).send(err.message);
-      }
-      // Jika semua proses berjalan dengan lancar return (81)
-      return res
-        .status(201)
-        .send({ message: "Data Created", status: "Created" });
+      // data produk serta alamat foto disimpan di sql
+      let sql = `INSERT INTO products (nama, harga, caption, stock, isAvailable, imagepath) VALUES ('${nama}', ${harga}, '${caption}', '${stock}', 1, '${imagePath}')`;
+      db.query(sql, (err, data) => {
+        if (err) {
+          // Jika sql error akan menghapus foto yang telah di upload
+          fs.unlinkSync(`public${imagePath}`);
+          return res.status(500).send(err.message);
+        }
+        // Jika semua proses berjalan dengan lancar return (81)
+        return res
+          .status(201)
+          .send({ message: "Data Created", status: "Created" });
+      });
     });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // Update
 router.patch("/:id", (req, res) => {
-  const { nama, caption, harga, stock } = req.body;
-  let sql = `UPDATE products SET nama = '${nama}', harga = ${harga}, stock = ${stock},  caption = '${caption}' WHERE id = ${req.params.id}`;
-  db.query(sql, (err) => {
-    if (err) {
-      return res.status(500).send(err.message);
+  db.query(
+    `SELECT * FROM products WHERE id = ${req.params.id}`,
+    (err, data) => {
+      const oldImagePath = data[0].imagepath;
+      const idProduct = data[0].id;
+
+      console.log(oldImagePath);
+      try {
+        const path = "/products";
+        const upload = uploader(path, "PRD").fields([{ name: "image" }]);
+
+        upload(req, res, (err) => {
+          const { image } = req.files;
+          const { nama, harga, caption, stock } = JSON.parse(req.body.data);
+          const imagePath = image
+            ? `${path}/${image[0].filename}`
+            : oldImagePath;
+          let sql = `UPDATE products SET nama = '${nama}', harga = ${harga}, caption = '${caption}', stock = ${stock}, imagepath = '${imagePath}' WHERE id = ${idProduct}`;
+
+          // let sql = `UPDATE products set imagepath = '${imagePath}' WHERE id = ${idProduct}`;
+
+          db.query(sql, (err) => {
+            if (err) {
+              fs.unlinkSync(`public${imagePath}`);
+              res.status(500).send(err);
+            }
+
+            if (image && oldImagePath !== null) {
+              fs.unlinkSync(`public${oldImagePath}`);
+            }
+
+            return res.status(200).send({
+              message: "Data Edited",
+              status: "Edited",
+            });
+          });
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
-    return res.status(200).send({ message: "Data Edited", status: "Edited" });
-  });
+  );
+
+  // const { nama, caption, harga, stock } = req.body;
+  // let sql = `UPDATE products SET nama = '${nama}', harga = ${harga}, stock = ${stock},  caption = '${caption}' WHERE id = ${req.params.id}`;
+  // db.query(sql, (err) => {
+  //   if (err) {
+  //     return res.status(500).send(err.message);
+  //   }
+  //   return res.status(200).send({ message: "Data Edited", status: "Edited" });
+  // });
 });
 
 // "Delete" Data (isAvailable = 0)

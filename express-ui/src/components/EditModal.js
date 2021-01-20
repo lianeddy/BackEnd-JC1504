@@ -9,6 +9,7 @@ import {
   Label,
   FormGroup,
   Input,
+  CustomInput,
 } from "reactstrap";
 
 class EditModal extends Component {
@@ -18,6 +19,10 @@ class EditModal extends Component {
     caption: "",
     stock: 0,
     harga: 0,
+    image: {
+      imageName: "Choose File",
+      imageFile: undefined,
+    },
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -39,6 +44,25 @@ class EditModal extends Component {
       ...this.state,
       [e.target.id]: e.target.value,
     });
+  };
+
+  onChangeImage = (e) => {
+    // File gambar masuk kedalam state
+    if (e.target.files[0]) {
+      this.setState({
+        image: {
+          imageName: e.target.files[0].name,
+          imageFile: e.target.files[0],
+        },
+      });
+    } else {
+      this.setState({
+        image: {
+          imageName: "Choose File",
+          imageFile: undefined,
+        },
+      });
+    }
   };
 
   editButton = () => {
@@ -84,6 +108,13 @@ class EditModal extends Component {
                   id="stock"
                   onChange={this.onChangeInput}
                   value={stock}
+                />
+                <Label>Image</Label>
+                <CustomInput
+                  id="inputImage"
+                  type="file"
+                  label={this.state.image.imageName}
+                  onChange={this.onChangeImage}
                 />
               </FormGroup>
             </Form>
