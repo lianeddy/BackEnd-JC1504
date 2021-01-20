@@ -97,7 +97,6 @@ router.patch("/:id", (req, res) => {
       const oldImagePath = data[0].imagepath;
       const idProduct = data[0].id;
 
-      console.log(oldImagePath);
       try {
         const path = "/products";
         const upload = uploader(path, "PRD").fields([{ name: "image" }]);
@@ -105,6 +104,8 @@ router.patch("/:id", (req, res) => {
         upload(req, res, (err) => {
           const { image } = req.files;
           const { nama, harga, caption, stock } = JSON.parse(req.body.data);
+
+          // apabila user tidak mengupload foto baru maka sql akan mengupdate menggunakan foto yang lama
           const imagePath = image
             ? `${path}/${image[0].filename}`
             : oldImagePath;
@@ -118,6 +119,7 @@ router.patch("/:id", (req, res) => {
               res.status(500).send(err);
             }
 
+            // Apabila user upload foto baru dan kolom imagepath sudah terisi dengan foto produk
             if (image && oldImagePath !== null) {
               fs.unlinkSync(`public${oldImagePath}`);
             }

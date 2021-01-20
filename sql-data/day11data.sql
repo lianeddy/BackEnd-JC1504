@@ -189,6 +189,7 @@ CREATE TABLE `users` (
   `usia` int(2) DEFAULT NULL,
   `beratbadan` int(11) NOT NULL,
   `roleID` int(11) NOT NULL,
+  `verirfied` int(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `roleID_idx` (`roleID`),
   CONSTRAINT `roleID` FOREIGN KEY (`roleID`) REFERENCES `roles` (`id`)
@@ -201,7 +202,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (15,'Susilo','susilo@mail.com','asd','Bandung',40,80,1),(21,'joko123','joko@mail.ocm','asd','Bandung',34,50,2),(30,'Dicky','dicky@mail.com','asd','BSD',45,123,1);
+INSERT INTO `users` VALUES (15,'Susilo','susilo@mail.com','asd','Bandung',40,80,1,0),(21,'joko123','joko@mail.ocm','asd','Bandung',34,50,2,0),(30,'Dicky','dicky@mail.com','asd','BSD',45,123,1,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -69,7 +69,6 @@ class AddModal extends Component {
   };
 
   render() {
-    console.log(this.state);
     const { isOpen } = this.props;
     return (
       <div>

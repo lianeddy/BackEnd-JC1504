@@ -136,12 +136,12 @@ export const editProductsAction = (data) => {
     dispatch({
       type: API_PRODUCT_START,
     });
+    const { id, nama, harga, caption, stock, image } = data;
+    const value = JSON.stringify({ nama, caption, stock, harga });
+    let formData = new FormData();
+    formData.append("image", image.imageFile);
+    formData.append("data", value);
     try {
-      const { id, nama, harga, caption, stock, image } = data;
-      const value = JSON.stringify({ nama, caption, stock, harga });
-      let formData = new FormData();
-      formData.append("image", image.imageFile);
-      formData.append("data", value);
       const headers = {
         headers: {
           "Content-Type": "multipart/form-data",
