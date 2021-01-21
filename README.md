@@ -1,3 +1,6 @@
-Di sesi ini kita akan mulai untuk integrasi API express dengan aplikasi FE (react) (continued).
+Di sesi ini kita akan belajar penggunaan JSON Web Token untuk authentication saat menjalankan sebuah endpoint API.
 
-- Multer (Upload File) (cont. Edit)
+- Setup (CreateJWTToken & CheckToken)
+- Login with Create Token
+- Keep Login with Check Token
+- React Implementation
