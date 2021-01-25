@@ -18,3 +18,19 @@
 //     console.log(decoded);
 //   }
 // });
+// const obj = {
+//   nama: "lian",
+// };
+
+// obj.hello = true;
+
+// console.log(obj);
+
+// const Crypto = require("crypto");
+// const pass = "asdsadasdasdasd123213123";
+// console.log(
+//   Crypto.createHmac("sha256", "kunciHash").update(pass).digest("hex")
+// );
+
+const { hashPassword } = require("./helper");
+console.log(hashPassword("asd123"));

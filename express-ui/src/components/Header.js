@@ -59,6 +59,9 @@ class Header extends Component {
                     <DropdownItem>
                       <Link to="/login">Login</Link>
                     </DropdownItem>
+                    <DropdownItem>
+                      <Link to="/register">Register</Link>
+                    </DropdownItem>
                   </DropdownMenu>
                 )}
               </UncontrolledDropdown>

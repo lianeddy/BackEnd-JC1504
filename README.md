@@ -1,6 +1,11 @@
-Di sesi ini kita akan belajar penggunaan JSON Web Token untuk authentication saat menjalankan sebuah endpoint API.
+Di sesi ini kita akan belajar penggunaan Nodemailer untuk melakukan verifikasi email saat register sebuah akun baru. (Nodemailer)
 
-- Setup (CreateJWTToken & CheckToken)
-- Login with Create Token
-- Keep Login with Check Token
-- React Implementation
+API
+
+- Send Email
+- Hash Password
+- Register Authentication Flow (Post Data & Email)
+
+Client
+
+- Register Page and Action

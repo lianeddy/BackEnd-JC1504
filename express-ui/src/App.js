@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import { Header } from "./components";
-import { LandingPage, LoginPage } from "./pages";
+import { LandingPage, LoginPage, RegisterPage } from "./pages";
 import { keepLoginAction } from "./redux/actions";
 import { connect } from "react-redux";
 
@@ -20,6 +20,7 @@ class App extends Component {
         <Header />
         <Route path="/" exact component={LandingPage} />
         <Route path="/login" component={LoginPage} />
+        <Route path="/register" component={RegisterPage} />
       </div>
     );
   }

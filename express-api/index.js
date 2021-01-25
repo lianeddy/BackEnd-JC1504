@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const bearerToken = require("express-bearer-token");
 const port = 2000;
+const { transporter } = require("./helper");
 const {
   cartRouter,
   imageRouter,
@@ -20,6 +21,27 @@ app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   res.status(200).send("<h1>Express API</h1>");
+});
+
+// Send Email
+app.post("/email", (req, res) => {
+  const to = req.query.email;
+  const mailOptions = {
+    from: "Lian <admin@gmail.com>",
+    to,
+    subject: "Testing NodeMailer",
+    html: `<h1>Hello from nodemailer</h1>`,
+  };
+  if (to) {
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) res.send(500).send(err);
+
+      return res.status(200).send({
+        message: info,
+        status: "Sent",
+      });
+    });
+  }
 });
 
 app.use("/cart", cartRouter);

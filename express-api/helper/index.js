@@ -1,8 +1,12 @@
-const uploader = require("./uploader");
 const { checkToken, createJWTToken } = require("./jwt");
+const hashPassword = require("./hash");
+const transporter = require("./nodemailer");
+const uploader = require("./uploader");
 
 module.exports = {
-  uploader,
   checkToken,
   createJWTToken,
+  hashPassword,
+  transporter,
+  uploader,
 };

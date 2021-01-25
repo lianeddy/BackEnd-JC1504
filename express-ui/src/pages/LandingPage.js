@@ -14,6 +14,7 @@ import {
   fetchProductsAction,
   nullifyErrorAction,
 } from "../redux/actions";
+import { Alert } from "reactstrap";
 
 class LandingPage extends Component {
   state = {
@@ -47,9 +48,18 @@ class LandingPage extends Component {
   };
 
   render() {
-    const { loading, error, deleteProductsAction, productList } = this.props;
+    const {
+      loading,
+      error,
+      deleteProductsAction,
+      productList,
+      verified,
+    } = this.props;
     return (
       <div className="m-2">
+        {!verified ? (
+          <Alert color="danger">Akun anda belum terverifikasi</Alert>
+        ) : null}
         <div className="row">
           <SideBar
             checkToggle={(e) =>
@@ -91,11 +101,12 @@ class LandingPage extends Component {
   }
 }
 
-const mapStatetoProps = ({ product }) => {
+const mapStatetoProps = ({ product, user }) => {
   return {
     loading: product.loading,
     productList: product.productList,
     error: product.error,
+    verified: user.verified,
   };
 };
 
