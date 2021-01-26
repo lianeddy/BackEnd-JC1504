@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Input, Spinner, Button } from "reactstrap";
 import { connect } from "react-redux";
 import { loginAction } from "../redux/actions";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 class LoginPage extends Component {
   state = {
@@ -45,6 +45,7 @@ class LoginPage extends Component {
             {loading ? <Spinner /> : "Login"}
           </Button>
         </div>
+        <Link to="/forget-password">Forget Password</Link>
       </div>
     );
   }

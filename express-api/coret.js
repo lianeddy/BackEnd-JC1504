@@ -1,7 +1,11 @@
 // let obj = '{"nama": "lian","role": "user","alamat": "BSD"}';
 // console.log(JSON.parse(obj));
 
-// const { createJWTToken } = require("./helper");
+const { createJWTToken } = require("./helper");
+const lama = { verified: 0 };
+const baru = { verified: 1 };
+console.log(createJWTToken(lama));
+console.log(createJWTToken(baru));
 // const jwt = require("jsonwebtoken");
 // const obj = {
 //   id: 10,
@@ -32,5 +36,5 @@
 //   Crypto.createHmac("sha256", "kunciHash").update(pass).digest("hex")
 // );
 
-const { hashPassword } = require("./helper");
-console.log(hashPassword("asd123"));
+// const { hashPassword } = require("./helper");
+// console.log(hashPassword("asd123"));

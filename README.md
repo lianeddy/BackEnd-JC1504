@@ -1,11 +1,12 @@
-Di sesi ini kita akan belajar penggunaan Nodemailer untuk melakukan verifikasi email saat register sebuah akun baru. (Nodemailer)
+Di sesi ini kita akan belajar penggunaan Nodemailer untuk melakukan verifikasi email saat register sebuah akun baru dan mengganti password. (Nodemailer)
 
 API
 
-- Send Email
-- Hash Password
-- Register Authentication Flow (Post Data & Email)
+- Send Email to Change Passoword
+- Change Password Route
 
 Client
 
-- Register Page and Action
+- Verify Email through Client
+- Forget Password Page
+- Change Password Page

@@ -98,14 +98,57 @@ router.post("/email-verification", (req, res) => {
     const idUser = data[0].id;
     const edit = `UPDATE users SET verified = 1 WHERE id = ${idUser}`;
     db.query(edit, (err) => {
-      if (err) return res.send(500).send(err);
+      if (err) return res.status(500).send(err);
 
-      return res.status(200).send({
-        message: "User Verified",
-        status: "Verified",
+      const login = `SELECT id, username, email, alamat, roleID, verified FROM users WHERE id = ${idUser}`;
+      db.query(login, (err, result) => {
+        if (err) return res.status(500).send(err);
+
+        const responseData = { ...result[0] };
+        const token = createJWTToken(responseData);
+        responseData.token = token;
+        return res.status(200).send(responseData);
       });
     });
   });
 });
+
+router.post("/change-email", (req, res) => {
+  const { email } = req.body;
+  const getEmail = `SELECT id FROM users WHERE email = '${email}'`;
+  db.query(getEmail, (err, getEmailResult) => {
+    if (err) return res.status(500).send(err);
+    const userID = getEmailResult[0].id;
+    const token = createJWTToken({ id: userID });
+
+    const mailOptions = {
+      from: "Admin <lian.eddy@gmail.com>",
+      to: email,
+      subject: "Forget Password Commerce",
+      html: `<a href="http://localhost:3000/change-password?token=${token}">Klik disini untuk mengganti password anda</a>`,
+    };
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) res.status(500).send(err);
+
+      return res.status(200).send("Ok");
+    });
+  });
+});
+
+router.post("/change-pass", checkToken, (req, res) => {
+  const { password } = req.body;
+  const userID = req.user.id;
+
+  const editPassword = `UPDATE users SET password = '${hashPassword(
+    password
+  )}' WHERE id = ${userID}`;
+  db.query(editPassword, (err) => {
+    if (err) return res.status(500).send(err);
+
+    return res.status(200).send("Ok");
+  });
+});
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEsImlhdCI6MTYxMTYzMzA1OCwiZXhwIjoxNjExNjc2MjU4fQ.wNcynEWijZpZAr9Mmv-Km1qLGJQgApk1hx-VbpiTlKs
 
 module.exports = router;

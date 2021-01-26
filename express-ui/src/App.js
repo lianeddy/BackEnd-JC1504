@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import { Header } from "./components";
-import { LandingPage, LoginPage, RegisterPage } from "./pages";
+import {
+  ChangePassPage,
+  ForgetPage,
+  LandingPage,
+  LoginPage,
+  RegisterPage,
+  VerifyPage,
+} from "./pages";
 import { keepLoginAction } from "./redux/actions";
 import { connect } from "react-redux";
 
@@ -19,8 +26,11 @@ class App extends Component {
       <div>
         <Header />
         <Route path="/" exact component={LandingPage} />
+        <Route path="/change-password" component={ChangePassPage} />
+        <Route path="/forget-password" component={ForgetPage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
+        <Route path="/verify" component={VerifyPage} />
       </div>
     );
   }

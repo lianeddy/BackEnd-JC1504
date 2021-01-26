@@ -12,7 +12,7 @@ const INITIAL_STATE = {
   email: "",
   alamat: "",
   roleID: 0,
-  verified: 0,
+  verified: null,
   loading: false,
   error: "",
 };

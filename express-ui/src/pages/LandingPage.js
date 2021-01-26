@@ -57,7 +57,7 @@ class LandingPage extends Component {
     } = this.props;
     return (
       <div className="m-2">
-        {!verified ? (
+        {verified === 0 ? (
           <Alert color="danger">Akun anda belum terverifikasi</Alert>
         ) : null}
         <div className="row">
