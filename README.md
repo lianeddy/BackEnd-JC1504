@@ -1,12 +1,8 @@
-Di sesi ini kita akan belajar penggunaan Nodemailer untuk melakukan verifikasi email saat register sebuah akun baru dan mengganti password. (Nodemailer)
+Di sesi ini kita akan belajar penggunaan Mongo DB dan eksplorasi perbedaan dari SQL dan no-SQL database.
 
-API
+CRUD
 
-- Send Email to Change Passoword
-- Change Password Route
-
-Client
-
-- Verify Email through Client
-- Forget Password Page
-- Change Password Page
+- Get with Query
+- Post
+- Patch (set & unset)
+- Delete
