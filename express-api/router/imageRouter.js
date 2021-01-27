@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../database");
+const { db } = require("../database");
 const { uploader } = require("../helper");
 const fs = require("fs");
 const path = "/images";

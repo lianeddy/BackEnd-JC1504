@@ -9,6 +9,7 @@ const {
   cartRouter,
   imageRouter,
   productRouter,
+  mongoRouter,
   userRouter,
 } = require("./router");
 
@@ -46,6 +47,7 @@ app.post("/email", (req, res) => {
 
 app.use("/cart", cartRouter);
 app.use("/image", imageRouter);
+app.use("/mongo", mongoRouter);
 app.use("/products", productRouter);
 app.use("/users", userRouter);
 
