@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { db } = require("../database");
+const { db, query } = require("../database");
 const fs = require("fs");
 const _ = require("lodash");
 const { uploader } = require("../helper");
+const { parse } = require("path");
 
 // Get ALL
 router.get("/", (req, res) => {
@@ -41,17 +42,40 @@ router.get("/", (req, res) => {
   });
 });
 // Get per ID
-router.get("/:id", (req, res) => {
+// router.get("/:id", (req, res) => {
+//   const id = parseInt(req.params.id);
+//   db.query(`SELECT * FROM products WHERE id = ${id}`, (err, data) => {
+//     if (err) {
+//       return res.status(500).send(err.message);
+//     }
+//     if (data.length === 0) {
+//       res.status(404).send("Data not found");
+//     }
+//     return res.status(200).send(data[0]);
+//   });
+// });
+
+// Promise
+// router.get("/:id", (req, res) => {
+//   const id = parseInt(req.params.id);
+//   query(`SELECT * FROM products WHERE id = ${id}`)
+//     .then((response) => {
+//       return res.status(200).send(response[0]);
+//     })
+//     .catch((err) => {
+//       return res.status(500).send(err);
+//     });
+// });
+
+// Async Await
+router.get("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
-  db.query(`SELECT * FROM products WHERE id = ${id}`, (err, data) => {
-    if (err) {
-      return res.status(500).send(err.message);
-    }
-    if (data.length === 0) {
-      res.status(404).send("Data not found");
-    }
-    return res.status(200).send(data[0]);
-  });
+  try {
+    const response = await query(`SELECT * FROM products WHERE id = ${id}`);
+    return res.status(200).send(response[0]);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
 });
 
 // Insert
@@ -163,28 +187,43 @@ router.put("/:id", (req, res) => {
 });
 
 // Delete Data
-router.delete("/:id", (req, res) => {
+// router.delete("/:id", (req, res) => {
+//   const id = parseInt(req.params.id);
+//   // Ambil alamat foto dari sql yang disimpan di API
+//   db.query(`SELECT * FROM products WHERE id = ${id}`, (err, data) => {
+//     if (err) {
+//       res.status(500).send(err);
+//     }
+//     // dapat alamat foto di api
+//     const oldImagePath = data[0].imagepath;
+//     const idProduct = data[0].id;
+//     // delete data di sql
+//     db.query(`DELETE FROM products WHERE id = ${idProduct}`, (err) => {
+//       if (err) {
+//         return res.status(500).send(err.message);
+//       }
+//       // delete file di API
+//       fs.unlinkSync(`public${oldImagePath}`);
+//       return res
+//         .status(200)
+//         .send({ message: "Data Deleted", status: "Deleted" });
+//     });
+//   });
+// });
+
+// Async Await
+router.delete("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
-  // Ambil alamat foto dari sql yang disimpan di API
-  db.query(`SELECT * FROM products WHERE id = ${id}`, (err, data) => {
-    if (err) {
-      res.status(500).send(err);
-    }
-    // dapat alamat foto di api
-    const oldImagePath = data[0].imagepath;
-    const idProduct = data[0].id;
-    // delete data di sql
-    db.query(`DELETE FROM products WHERE id = ${idProduct}`, (err) => {
-      if (err) {
-        return res.status(500).send(err.message);
-      }
-      // delete file di API
-      fs.unlinkSync(`public${oldImagePath}`);
-      return res
-        .status(200)
-        .send({ message: "Data Deleted", status: "Deleted" });
-    });
-  });
+  try {
+    const product = await query(`SELECT * FROM products WHERE id = ${id}`);
+    const idProduct = product[0].id;
+    const oldImagePath = product[0].imagepath;
+    await query(`DELETE FROM products WHERE id = ${idProduct}`);
+    fs.unlinkSync(`public${oldImagePath}`);
+    return res.status(200).send({ message: "Data Deleted", status: "Deleted" });
+  } catch (err) {
+    return res.status(500).send(err);
+  }
 });
 
 module.exports = router;

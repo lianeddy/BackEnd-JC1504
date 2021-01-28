@@ -1,11 +1,12 @@
 const express = require("express");
-const { db } = require("../database");
+const { db, query } = require("../database");
 const router = express.Router();
 const {
   checkToken,
   createJWTToken,
   hashPassword,
   transporter,
+  transportPromise,
 } = require("../helper");
 
 router.post("/login", (req, res) => {
@@ -58,34 +59,60 @@ router.post("/keep-login", checkToken, (req, res) => {
 });
 
 // Register Authentication Flow
-router.post("/register", (req, res) => {
+// router.post("/register", (req, res) => {
+//   let { username, password, email, alamat } = req.body;
+//   password = hashPassword(password);
+//   // Add data to database
+//   const sql = `INSERT INTO users (username, email, password, alamat, roleID, verified) VALUES ('${username}', '${email}', '${password}', '${alamat}', 2, 0)`;
+//   db.query(sql, (err, data) => {
+//     if (err) return res.send(500).send(err);
+//     // Send Email
+//     const mailOptions = {
+//       from: "Admin <lian.eddy@gmail.com>",
+//       to: email,
+//       subject: "Email Verification",
+//       html: `<h1>Welcome ${username} to Commerce</h1> <br> <a href="http://localhost:3000/verify?username=${username}&password=${password}">Click Here to Verify your Account</a>`,
+//     };
+//     transporter.sendMail(mailOptions, (err, info) => {
+//       if (err) return res.status(500).send(err);
+//       // Get data for login at client
+//       const get = `SELECT id, username, email, alamat, roleID, verified FROM users WHERE id = ${data.insertId}`;
+//       db.query(get, (err, result) => {
+//         if (err) return res.status(500).send(err);
+
+//         const responseData = { ...result[0] };
+//         const token = createJWTToken(responseData);
+//         responseData.token = token;
+//         return res.status(200).send(responseData);
+//       });
+//     });
+//   });
+// });
+
+// Promisify
+router.post("/register", async (req, res) => {
   let { username, password, email, alamat } = req.body;
   password = hashPassword(password);
-  // Add data to database
-  const sql = `INSERT INTO users (username, email, password, alamat, roleID, verified) VALUES ('${username}', '${email}', '${password}', '${alamat}', 2, 0)`;
-  db.query(sql, (err, data) => {
-    if (err) return res.send(500).send(err);
-    // Send Email
+  try {
+    const insert = await query(
+      `INSERT INTO users (username, email, password, alamat, roleID, verified) VALUES ('${username}', '${email}', '${password}', '${alamat}', 2, 0)`
+    );
     const mailOptions = {
       from: "Admin <lian.eddy@gmail.com>",
       to: email,
       subject: "Email Verification",
       html: `<h1>Welcome ${username} to Commerce</h1> <br> <a href="http://localhost:3000/verify?username=${username}&password=${password}">Click Here to Verify your Account</a>`,
     };
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) return res.status(500).send(err);
-      // Get data for login at client
-      const get = `SELECT id, username, email, alamat, roleID, verified FROM users WHERE id = ${data.insertId}`;
-      db.query(get, (err, result) => {
-        if (err) return res.status(500).send(err);
-
-        const responseData = { ...result[0] };
-        const token = createJWTToken(responseData);
-        responseData.token = token;
-        return res.status(200).send(responseData);
-      });
-    });
-  });
+    await transportPromise(mailOptions);
+    const select = await query(
+      `SELECT id, username, email, alamat, roleID, verified FROM users WHERE id = ${insert.insertId}`
+    );
+    const responseData = { ...select[0] };
+    responseData.token = createJWTToken(responseData);
+    return res.status(200).send(responseData);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
 });
 
 // Email Verification

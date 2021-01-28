@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const util = require("util");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -8,4 +9,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-module.exports = transporter;
+const transportPromise = util.promisify(transporter.sendMail).bind(transporter);
+
+module.exports = { transporter, transportPromise };

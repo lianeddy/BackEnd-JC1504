@@ -3,6 +3,7 @@ import { Route } from "react-router-dom";
 import { Header } from "./components";
 import {
   ChangePassPage,
+  ChatPage,
   ForgetPage,
   LandingPage,
   LoginPage,
@@ -27,6 +28,7 @@ class App extends Component {
         <Header />
         <Route path="/" exact component={LandingPage} />
         <Route path="/change-password" component={ChangePassPage} />
+        <Route path="/chat" component={ChatPage} />
         <Route path="/forget-password" component={ForgetPage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />

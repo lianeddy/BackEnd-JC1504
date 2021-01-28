@@ -1,8 +1,9 @@
-Di sesi ini kita akan belajar penggunaan Mongo DB dan eksplorasi perbedaan dari SQL dan no-SQL database.
+Di sesi ini kita akan belajar penggunaan Promisify untuk async await di mysql dan intro socket.io untuk real time data
 
-CRUD
+Util(Node.js Built in Module)
 
-- Get with Query
-- Post
-- Patch (set & unset)
-- Delete
+- Promisify
+
+Socket.io
+
+- Emit
