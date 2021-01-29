@@ -13,12 +13,14 @@ const {
   imageRouter,
   productRouter,
   mongoRouter,
+  socketRouter,
   userRouter,
 } = require("./router");
+const { query } = require("./database");
 
 app.use(bearerToken());
 app.use(bodyParser());
-// app.use(cors());
+app.use(cors());
 app.use(express.static("public"));
 
 let userCount = 0;
@@ -30,12 +32,8 @@ io.on("connection", (socket) => {
   console.log("User Connected", userCount);
   io.emit("JumlahUser", userCount);
 
-  socket.on("chat", (data) => {
+  socket.on("disconnect", (data) => {
     console.log(data);
-    io.emit("chat", data);
-  });
-
-  socket.on("disconnect", () => {
     userCount--;
     console.log("User Disconnected, Remaining: ", userCount);
     io.emit("JumlahUser", userCount);
@@ -46,10 +44,16 @@ app.get("/", (req, res) => {
   res.status(200).send("<h1>Express API</h1>");
 });
 
+app.get("/chat", async (req, res) => {
+  const response = await query(`SELECT * FROM chat`);
+  res.send(response);
+});
+
 app.use("/cart", cartRouter);
 app.use("/image", imageRouter);
 app.use("/mongo", mongoRouter);
 app.use("/products", productRouter);
+app.use("/socket", socketRouter);
 app.use("/users", userRouter);
 
 server.listen(port, () => console.log(`API active at port ${port}`));

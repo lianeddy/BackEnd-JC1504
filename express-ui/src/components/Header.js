@@ -33,14 +33,17 @@ class Header extends Component {
     return (
       <div>
         <Navbar color="light" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
+          <Link to="/">reactstrap</Link>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="mr-auto" navbar>
               <NavItem>
                 <NavLink href="https://github.com/reactstrap/reactstrap">
-                  GitHub
+                  Github
                 </NavLink>
+              </NavItem>
+              <NavItem>
+                <Link to="/chat">Chat</Link>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>

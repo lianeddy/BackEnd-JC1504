@@ -12,6 +12,7 @@ import {
 } from "./pages";
 import { keepLoginAction } from "./redux/actions";
 import { connect } from "react-redux";
+import { socket, createNotification } from "./helpers";
 
 class App extends Component {
   state = {};
@@ -21,6 +22,7 @@ class App extends Component {
     if (token) {
       keepLoginAction();
     }
+    socket.on("notification", (data) => createNotification(data));
   }
   render() {
     return (

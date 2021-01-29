@@ -1,9 +1,6 @@
-Di sesi ini kita akan belajar penggunaan Promisify untuk async await di mysql dan intro socket.io untuk real time data
-
-Util(Node.js Built in Module)
-
-- Promisify
+Di sesi ini kita akan belajar penggunaan socket.io untuk real time data
 
 Socket.io
 
-- Emit
+- Emit (Cont.)
+- Chat App (init)
