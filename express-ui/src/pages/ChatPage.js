@@ -3,6 +3,7 @@ import { Button, Input } from "reactstrap";
 // import io from "socket.io-client";
 import { api_url, socket } from "../helpers";
 import Axios from "axios";
+import { connect } from "react-redux";
 
 class ChatPage extends Component {
   state = {
@@ -31,9 +32,11 @@ class ChatPage extends Component {
   };
 
   submitChat = async (e) => {
+    const { userID } = this.props;
     e.preventDefault();
     const { message } = this.state;
-    await Axios.post(`${api_url}/socket`, { message });
+    socket.emit("notification", message);
+    await Axios.post(`${api_url}/socket/${userID}`, { message });
     this.setState({ message: "" });
   };
 
@@ -68,8 +71,12 @@ class ChatPage extends Component {
             }}
           >
             <div>
-              {chat.map(({ id, message }) => {
-                return <div key={id}>{message}</div>;
+              {chat.map(({ id, username, createdAt, message }) => {
+                return (
+                  <div
+                    key={id}
+                  >{`${username} (${createdAt}) : ${message}`}</div>
+                );
               })}
             </div>
           </div>
@@ -95,4 +102,10 @@ class ChatPage extends Component {
   }
 }
 
-export default ChatPage;
+const mapStatetoProps = (state) => {
+  return {
+    userID: state.user.id,
+  };
+};
+
+export default connect(mapStatetoProps)(ChatPage);

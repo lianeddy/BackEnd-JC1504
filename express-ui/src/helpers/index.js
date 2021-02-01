@@ -21,3 +21,5 @@ export const createNotification = (str) =>
 
 export const api_url = "http://localhost:2000";
 export const socket = io(api_url);
+// export const socket = io(api_url + "/user");
+// export const socketAdmin = io(api_url + "/admin");

@@ -33,12 +33,23 @@ io.on("connection", (socket) => {
   io.emit("JumlahUser", userCount);
 
   socket.on("disconnect", (data) => {
-    console.log(data);
     userCount--;
     console.log("User Disconnected, Remaining: ", userCount);
     io.emit("JumlahUser", userCount);
   });
 });
+// Namespace
+// const admin = io.of("/admin");
+// app.adminNamespace = admin;
+// admin.on("connection", (socket) => {
+//   console.log("connected admin");
+// });
+
+// const user = io.of("/user");
+// app.userNamespace = user;
+// user.on("connection", (socket) => {
+//   console.log("connected user");
+// });
 
 app.get("/", (req, res) => {
   res.status(200).send("<h1>Express API</h1>");
